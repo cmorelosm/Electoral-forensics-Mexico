@@ -1,5 +1,5 @@
 # Electoral-forensics
-This project aims to evaluate if the results of the 2012 and 2018 presidential elections in Mexico suggest the presence of electoral manipulation at a state level.
+#This project aims to evaluate if the results of the 2012 and 2018 presidential elections in Mexico suggest the presence of electoral manipulation at a state level.
 
 ##First we get the 2012 Mexican electoral data
 #rm(list=ls())
@@ -122,6 +122,24 @@ plot(density(ndata$AbsPRD))
 ### Analysis of absolute support can provide information as to the type of fraud
 ##employed in an electoral process. If vote manipulation comes in the form of vote inflation, the absolute support
 ##histogram for the perpetrator will shift to the right 
+data.edo<-list()
+index.edo<-c(1:32)
+for (i in 1:32){
+  data.edo[[i]] <- ndata0[ndata0$id.estado==index.edo[i],c(8:24)]
+}
+library(ggplot2)
+qplot(data.edo[[5]]$v, geom = 'histogram', binwidth = 2) + xlab('Votes for PRI, Coahuila 2012')
+datacoah<- data.frame(data.edo[[5]]$v)
+ggplot(datacoah, aes(x = data.edo[[5]]$v), binwidth = 0.0001) + 
+  geom_histogram(aes(y = ..density..), alpha = 0.5) + 
+  geom_density(colour = 'blue') + xlab(expression(bold('Votes for PRI Coahuila, 2012'))) + 
+  ylab(expression(bold('Density')))
+
+datacoah2<- data.frame(data.edo[[5]]$turnout)
+ggplot(datacoah2, aes(x = data.edo[[5]]$turnout), binwidth = 0.0001) + 
+  geom_histogram(aes(y = ..density..), alpha = 0.5) + 
+  geom_density(colour = 'blue') + xlab(expression(bold('Turnout rates Coahuila, 2012'))) + 
+  ylab(expression(bold('Density')))
 
 library("dplyr")
 library("ggpubr")
@@ -155,7 +173,9 @@ ggdensity( data.edo[[1]]$v,
 ggdensity( data.edo[[2]]$v, 
            main = "Baja California: 2012 PRI's votes",
            xlab = "PRI's Votes")
-
+#.
+#.
+#.
 
 
 
@@ -194,9 +214,9 @@ boxplot(ndata$AbsPRD, horizontal=TRUE, main="Absolute support for PRD, 2012")
 
 boxplot(data.edo[[1]]$v, horizontal=TRUE, main="Aguascalientes PRI´s votes, 2012")
 boxplot(data.edo[[2]]$v, horizontal=TRUE, main="Baja California PRI´s votes, 2012")
-.
-.
-.
+#.
+#.
+#.
 
 
 
@@ -2075,3 +2095,11 @@ an2.uni.2<-anova(unimodal2018.2, unimodal2012.2, test = "Chisq")
 an2.skew.2<-anova(skew2018.2, skew2012.2, test = "Chisq")
 an2.kurt.2<-anova(kurt2018.2, kurt2012.2, test = "Chisq")
 
+library(stats)
+f.roz<- (var.test(roz2018.1.2, roz2012.2))
+f.ben <-(var.test(bendf2018.2, bendf2012.2))
+f.uni <-(var.test(unimodal2018.2, unimodal2012.2))
+f.skew <-(var.test(skew2018.2, skew2012.2))
+f.kur <-(var.test(kurt2018.2, kurt2012.2))
+
+(var.test(roz2012.2, roz2018.1.2))
